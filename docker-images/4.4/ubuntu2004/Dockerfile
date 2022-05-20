@@ -508,14 +508,19 @@ RUN \
         rm -rf ${DIR}
 
 ## Clone private ffmpeg
-ARG DUMMY=0
 RUN  \
         DIR=/tmp && cd ${DIR} && \
         git clone -b b_xpsnr_analysis https://github.com/nimrodmarom/FFmpeg.git ffmpeg && \
         cd ffmpeg && \
         ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
-        make ;  make install
+        make ; 
 
+ARG DUMMY=0
+## Update to latest version of origin/b_xpsnr_analysis
+RUN \
+        DIR=/tmp/ffmpeg && cd ${DIR} && \
+        git pull && \
+        make ; make install
 
 ## Build ffmpeg https://ffmpeg.org/
 RUN  \
