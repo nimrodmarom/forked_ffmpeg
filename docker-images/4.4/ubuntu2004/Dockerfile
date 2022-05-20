@@ -507,28 +507,14 @@ RUN \
         make install && \
         rm -rf ${DIR}
 
-## Download ffmpeg https://ffmpeg.org/
+## Clone private ffmpeg
+ARG DUMMY=0
 RUN  \
-        DIR=/tmp/ffmpeg && mkdir -p ${DIR} && cd ${DIR} && \
-        curl -sLO https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
-        tar -jx --strip-components=1 -f ffmpeg-${FFMPEG_VERSION}.tar.bz2 && \
+        DIR=/tmp && cd ${DIR} && \
+        git clone -b b_xpsnr_analysis https://github.com/nimrodmarom/FFmpeg.git && \
+        cd FFmpeg && \
         ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
         make ;  make install
-
-
-## Patching xpsnr filter into ffmpeg
-## NOTE: This patch is build for ffmpeg 4.4 (files overriding depends on that)
-RUN \
-        echo "Patching xpsnr filter into ffmpeg" && \
-        DIR=/tmp/xpsnr && \
-        FFMPEG_DIR=/tmp/ffmpeg && \
-        git clone https://github.com/fraunhoferhhi/xpsnr.git --branch v1.2 ${DIR} ; \
-        rm ${FFMPEG_DIR}/libavfilter/allfilters.c -f ; \
-        rm ${FFMPEG_DIR}/libavfilter/Makefile -f ; \
-        cp ${DIR}/libavfilter/* ${FFMPEG_DIR}/libavfilter/ ; \
-        cd ${FFMPEG_DIR} ; \
-        ./configure ; \
-        rm -rf ${DIR}
 
 
 ## Build ffmpeg https://ffmpeg.org/
