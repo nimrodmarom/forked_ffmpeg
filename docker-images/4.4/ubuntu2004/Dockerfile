@@ -511,8 +511,8 @@ RUN \
 ARG DUMMY=0
 RUN  \
         DIR=/tmp && cd ${DIR} && \
-        git clone -b b_xpsnr_analysis https://github.com/nimrodmarom/FFmpeg.git && \
-        cd FFmpeg && \
+        git clone -b b_xpsnr_analysis https://github.com/nimrodmarom/FFmpeg.git ffmpeg && \
+        cd ffmpeg && \
         ./configure     --disable-debug  --disable-doc    --disable-ffplay   --enable-shared --enable-gpl  --extra-libs=-ldl && \
         make ;  make install
 
