@@ -114,7 +114,7 @@ RUN \
         ninja -vC build install && \
         mkdir -p ${PREFIX}/share/model/ && \
         cp -r /tmp/vmaf/model/* ${PREFIX}/share/model/ && \
-        rm -rf ${DIR}; \
+        rm -rf ${DIR}; \ 
         else \
         echo "VMAF skipped."; \
         fi
@@ -599,6 +599,10 @@ CMD         ["--help"]
 ENTRYPOINT  ["ffmpeg"]
 
 COPY --from=build /usr/local /usr/local/
+
+RUN mkdir -p /usr/share/model/
+
+COPY --from=build /opt/ffmpeg/share/model/ /usr/share/model/
 
 # Let's make sure the app built correctly
 # Convenient to verify on https://hub.docker.com/r/jrottenberg/ffmpeg/builds/ console output
